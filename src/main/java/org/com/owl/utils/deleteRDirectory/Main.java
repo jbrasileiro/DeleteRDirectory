@@ -14,7 +14,7 @@ import org.com.owl.utils.deleteRDirectory.filter.CustomDirectoryFilter;
 import org.com.owl.utils.deleteRDirectory.filter.DirectoryFilter;
 
 public class Main {
-	public static void main(String[] args) throws Exception {
+	public static void main(final String[] args) throws Exception {
 		DeleteDirectoryRArgumentProcessor processor = new DeleteDirectoryRArgumentProcessorImp(args);
 		DeleteDirectoryR deleteDirectoryR = new DeleteDirectoryR();
 		System.err.println(deleteDirectoryR.run(processor.process()) ? "OK" : "ERROR");
@@ -25,33 +25,32 @@ class DeleteDirectoryR {
 	private boolean debug = false;
 	private boolean verify = false;
 
-	public boolean run(DeleteRDirectoryParameter parameters) {
+	public boolean run(final DeleteRDirectoryParameter parameters) {
 		if (parameters == null) {
 			throw new IllegalArgumentException("no parameters");
 		} else {
 			if (parameters.isDebug()) {
-				this.debug = Boolean.TRUE;
+				debug = Boolean.TRUE;
 			}
 			if (parameters.isVerify()) {
-				this.verify = Boolean.TRUE;
+				verify = Boolean.TRUE;
 			}
-
 			File file = parameters.getFile();
-			if (this.debug) {
+			if (debug) {
 				System.out.println(file.getAbsolutePath());
 			}
 			return deleteRecursive(file, parameters.getDirectoriesName());
 		}
 	}
 
-	protected boolean deleteRecursive(File file, String directoryName) {
+	protected boolean deleteRecursive(final File file, final String directoryName) {
 		return deleteRecursive(file, new String[] { directoryName });
 	}
 
-	protected boolean deleteRecursive(File file, final String[] directoriesName) {
+	protected boolean deleteRecursive(final File file, final String[] directoriesName) {
 		DirectoryProcessor processor = new DirectoryProcessor(file, new CustomDirectoryFilter(directoriesName)) {
 			@Override
-			protected boolean doAction(File vDirectory) {
+			protected boolean doAction(final File vDirectory) {
 				DirectoryFile directoryFile = new DirectoryFile(vDirectory, getFileDeleter());
 				return directoryFile.delete();
 			}
@@ -63,7 +62,7 @@ class DeleteDirectoryR {
 		processor.process();
 		DirectoryProcessor directoryProcessor = new DirectoryProcessor(file, new DirectoryFilter()) {
 			@Override
-			protected boolean doAction(File vDirectory) {
+			protected boolean doAction(final File vDirectory) {
 				return deleteRecursive(vDirectory, directoriesName);
 			}
 		};
