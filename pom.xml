@@ -8,32 +8,18 @@
 	<artifactId>deleteRDirectory</artifactId>
 	<version>0.0.1</version>
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		
-		<!-- SONAR -->
-		<version.sonar-maven-plugin>3.2</version.sonar-maven-plugin>
-		<mvn.sonar.url>http://localhost:9000/sonarqube.6.2</mvn.sonar.url>
+		<!-- CONFIGURATION -->
 		<directory>C:\.tmp\mvn\${project.artifactId}\target</directory>
-		<!-- SONAR -->
-		<p.sonar.token>61455318fbf50d57a3ed2074c73a6972e140d9b7</p.sonar.token>
-		<p.sonar.branch>master</p.sonar.branch>
-		<sonar.host.url>${mvn.sonar.url}</sonar.host.url>
-		<sonar.login>${p.sonar.token}</sonar.login>
-		<sonar.branch>${p.sonar.branch}</sonar.branch>
-		<sonar.language>java</sonar.language>
-		<sonar.java.source>java7</sonar.java.source>
-		<sonar.sourceEncoding>UTF-8</sonar.sourceEncoding>
-				
-
-		<!-- PLUGINS CONFIGURATION -->
-		<!-- maven-compiler-plugin -->
-		<main.class>org.com.owl.utils.deleteRDirectory.Main</main.class>
-		<maven.compiler.target>1.7</maven.compiler.target>
-		<maven.compiler.source>1.7</maven.compiler.source>
 		
 		<!-- PLUGINS VERSION -->
+		<version-maven-compiler-plugin>3.6.1</version-maven-compiler-plugin>
+		<version.maven-resources-plugin>3.0.1</version.maven-resources-plugin>
+		<version-maven-dependency-plugin>2.6</version-maven-dependency-plugin>
 		<version.maven-jar-plugin>2.6</version.maven-jar-plugin>
-
+		<version.maven-ear-plugin>2.10.1</version.maven-ear-plugin>
+		<version.sonar-maven-plugin>3.2</version.sonar-maven-plugin>
+		<version.properties-maven-plugin>1.0.0</version.properties-maven-plugin>
+		
 		<!-- DEPENDENCY VERSION -->
 		<version.junit>4.12</version.junit>
 		<version.mockito-all>1.10.19</version.mockito-all>
@@ -57,7 +43,93 @@
 		</dependency>
 	</dependencies>
 	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>properties-maven-plugin</artifactId>
+					<version>${version.properties-maven-plugin}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${version-maven-compiler-plugin}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>${version.maven-resources-plugin}</version>
+					<configuration>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>${version-maven-dependency-plugin}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>${version.maven-jar-plugin}</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>initialize</phase>
+						<goals>
+							<goal>read-project-properties</goal>
+						</goals>
+						<configuration>
+							<files>
+								<file>src/properties/mvn-configuration.properties</file>
+								<file>src/properties/mvn-compiler.properties</file>
+								<file>src/properties/mvn-jar.properties</file>
+								<file>src/properties/sonarqube.properties</file>
+							</files>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+					<fork>${maven.compiler.fork}</fork>
+					<debug>${maven.compiler.debug}</debug>
+					<debuglevel>${maven.compiler.debuglevel}</debuglevel>
+					<failOnError>${maven.compiler.failOnError}</failOnError>
+					<failOnWarning>${maven.compiler.failOnWarning}</failOnWarning>
+					<maxmem>${maven.compiler.maxmem}</maxmem>
+					<meminitial>${maven.compiler.meminitial}</meminitial>
+					<optimize>${maven.compiler.optimize}</optimize>
+					<showDeprecation>${maven.compiler.showDeprecation}</showDeprecation>
+					<showWarnings>${maven.compiler.showWarnings}</showWarnings>
+					<skipMain>${maven.main.skip}</skipMain>
+				</configuration>
+				<executions>
+					<!--eclipse do not support duplicated package-info.java, in both src and test. -->
+					<execution>
+						<id>default-testCompile</id>
+						<phase>test-compile</phase>
+						<configuration>
+							<testExcludes>
+								<exclude>**/package-info.java</exclude>
+							</testExcludes>
+						</configuration>
+						<goals>
+							<goal>testCompile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
@@ -69,22 +141,15 @@
 							<goal>copy-dependencies</goal>
 						</goals>
 						<configuration>
-							<includeScope>runtime</includeScope>
-							<outputDirectory>${project.build.directory}/dependency-jars/</outputDirectory>
-							<overWriteReleases>false</overWriteReleases>
-							<overWriteSnapshots>false</overWriteSnapshots>
-							<overWriteIfNewer>true</overWriteIfNewer>
+							<includeScope>${config.includeScope}</includeScope>
+							<outputDirectory>${config.outputDirectory}</outputDirectory>
+							<overWriteReleases>${config.overWriteReleases}</overWriteReleases>
+							<overWriteSnapshots>${config.overWriteSnapshots}</overWriteSnapshots>
+							<overWriteIfNewer>${config.overWriteIfNewer}</overWriteIfNewer>
 						</configuration>
 					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>3.0.0</version>
-				<executions>
 					<execution>
-						<id>copy-dependencies-II</id>
+						<id>copy-dependencies-to-target</id>
 						<phase>package</phase>
 						<goals>
 							<goal>copy-dependencies</goal>
@@ -98,29 +163,29 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>${version.maven-jar-plugin}</version>
 				<configuration>
-					<outputDirectory>target</outputDirectory>
+					<outputDirectory>${mvn.jar.outputDirectory}</outputDirectory>
 					<archive>
 						<manifest>
-							<addClasspath>true</addClasspath>
-							<mainClass>${main.class}</mainClass>
-							<classpathPrefix>dependency-jars/</classpathPrefix>
+							<addClasspath>${mvn.jar.manifest.addClasspath}</addClasspath>
+							<mainClass>${mvn.jar.manifest.mainClass}</mainClass>
+							<classpathPrefix>${mvn.jar.manifest.classpathPrefix}</classpathPrefix>
 						</manifest>
 					</archive>
 				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
 					<archive>
 						<manifest>
-							<addClasspath>true</addClasspath>
-							<mainClass>${main.class}</mainClass>
+							<addClasspath>${mvn.assembly.addClasspath}</addClasspath>
+							<mainClass>${mvn.assembly.mainClass}</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
+						<descriptorRef>${mvn.assembly.descriptorRef}</descriptorRef>
 					</descriptorRefs>
 				</configuration>
 				<executions>
@@ -133,6 +198,7 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- 
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>sonar-maven-plugin</artifactId>
@@ -147,6 +213,7 @@
 					</execution>
 				</executions>
 			</plugin>
+			 -->
 		</plugins>
 	</build>
 </project>

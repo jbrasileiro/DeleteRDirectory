@@ -8,7 +8,7 @@ public class MainTest {
 	public void testMain() throws Exception {
 		Main.main(new String[]{
 		    "--DEBUG"
-		    ,"--SC:\\.rep\\svn\\IATA"
+		    ,"--SC:\\.tmp\\.tmp"
 		    ,".settings"
 //		    ,"bin"
 //		    ,"target"
