@@ -1,6 +1,7 @@
-package org.com.owl.utils.deleteRDirectory.enums;
+package org.com.commons.main.enums;
 
-import org.com.owl.utils.deleteRDirectory.constant.TypeArgument;
+import org.com.commons.enums.TypeStringCase;
+import org.com.commons.main.TypeArgument;
 
 public enum TypeArgumentEnum {
         SOURCE(TypeArgument.KEY_SOURCE,

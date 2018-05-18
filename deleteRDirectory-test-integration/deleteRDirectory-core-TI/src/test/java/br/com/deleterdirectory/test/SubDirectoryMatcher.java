@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 
-import org.com.owl.utils.deleteRDirectory.filter.DirectoryFilter;
+import org.com.commons.io.file.DirectoryFilter;
 import org.hamcrest.Description;
 
 import br.com.core.test.AbstractBaseMatcherType;

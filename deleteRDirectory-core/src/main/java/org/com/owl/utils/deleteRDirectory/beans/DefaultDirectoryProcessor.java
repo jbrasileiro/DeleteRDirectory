@@ -3,8 +3,9 @@ package org.com.owl.utils.deleteRDirectory.beans;
 import java.io.File;
 import java.io.FileFilter;
 
-import org.com.owl.utils.deleteRDirectory.file.DirectoryFile;
-import org.com.owl.utils.deleteRDirectory.file.FileProcessor;
+import org.com.commons.io.file.DirectoryFile;
+import org.com.commons.io.file.DirectoryProcessable;
+import org.com.commons.io.file.FileProcessor;
 
 public final class DefaultDirectoryProcessor
     implements

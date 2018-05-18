@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.com.commons.main.enums.TypeArgumentEnum;
 import org.com.owl.utils.deleteRDirectory.DeleteRDirectoryParameter;
-import org.com.owl.utils.deleteRDirectory.enums.TypeArgumentEnum;
 
 public final class DeleteDirectoryRArgumentProcessorImp
     implements

@@ -2,7 +2,7 @@ package br.com.deleterdirectory.test;
 
 import java.io.File;
 
-import org.com.owl.utils.deleteRDirectory.filter.DirectoryFilter;
+import org.com.commons.io.file.DirectoryFilter;
 import org.hamcrest.Description;
 
 import br.com.core.test.AbstractBaseMatcherType;

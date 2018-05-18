@@ -1,8 +1,8 @@
 /**
- * 
+ *
  */
 /**
  * @author joao.almeida
  *
  */
-package br.com.it.base;
+package br.com.core.it;
