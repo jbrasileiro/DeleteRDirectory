@@ -1,0 +1,43 @@
+node {	
+	def MVN_HOME = tool 'maven-3.5.3';
+	echo "MVN_HOME = ${MVN_HOME}"
+	def JAVA_HOME = tool 'JDK7';
+	echo "JAVA_HOME = ${JAVA_HOME}"
+	stage('cleaning'){
+	    cleanWs();
+	}
+	//clean verify -Dmvn.verify.fail=false
+	stage('Cheking out (GIT)') {
+		checkout scm
+		//sh 'git clone https://github.com/osp-huhula/huhula.git ./'
+	}
+	stage('Compile') {
+		if (isUnix()) {
+			sh "'${MVN_HOME}/bin/mvn' clean compile -Dmvn.project.location=${WORKSPACE}  "
+		} else {
+			bat(/"${mvnHome}\bin\mvn" clean compile -Dmvn.project.location=${WORKSPACE} /)
+		}
+	}
+	stage('Verify') {
+		if (isUnix()) {
+			sh "'${MVN_HOME}/bin/mvn' verify -Dmvn.project.location=${WORKSPACE} -Dmvn.verify.fail=false "
+		} else {
+			bat(/"${mvnHome}\bin\mvn" verify -Dmvn.project.location=${WORKSPACE} -Dmvn.verify.fail=false " /)
+		}
+	}
+	stage('Install') {
+		if (isUnix()) {
+			sh "'${MVN_HOME}/bin/mvn' clean install -Dmvn.project.location=${WORKSPACE} -Dmvn.verify.fail=false "
+		} else {
+			bat(/"${mvnHome}\bin\mvn" clean install -Dmvn.project.location=${WORKSPACE} -Dmvn.verify.fail=false /)
+		}
+	}
+	stage('Site ') {
+		if (isUnix()) {
+			sh "'${MVN_HOME}/bin/mvn' site -Dmvn.project.location=${WORKSPACE} -Dmvn.verify.fail=false "
+		} else {
+			bat(/"${mvnHome}\bin\mvn" site -Dmvn.project.location=${WORKSPACE} -Dmvn.verify.fail=false /)
+		}
+	}
+}
+
