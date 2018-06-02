@@ -39,5 +39,9 @@ node {
 			bat(/"${mvnHome}\bin\mvn" site -Dmvn.project.location=${WORKSPACE} -Dmvn.verify.fail=false /)
 		}
 	}
+	stage('Results') {
+      junit '**/target/surefire-reports/TEST-*.xml'
+      archive 'target/*.jar'
+   }
 }
 
