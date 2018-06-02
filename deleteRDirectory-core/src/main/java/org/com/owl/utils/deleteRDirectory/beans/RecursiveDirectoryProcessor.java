@@ -1,5 +1,6 @@
 package org.com.owl.utils.deleteRDirectory.beans;
 
+import java.io.File;
 import java.io.FileFilter;
 
 import org.com.commons.io.file.DirectoryFile;
@@ -37,6 +38,13 @@ public final class RecursiveDirectoryProcessor {
     private FileProcessor fileProcessor(
         final String[] directoriesName,
         final FileDeleter fileDeleter) {
-        return file -> deleter.delete(file, directoriesName, fileDeleter);
+        return new FileProcessor() {
+
+            @Override
+            public boolean process(
+                final File file) {
+                return deleter.delete(file, directoriesName, fileDeleter);
+            }
+        };
     }
 }

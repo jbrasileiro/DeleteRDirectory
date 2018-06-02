@@ -1,5 +1,6 @@
 package org.com.owl.utils.deleteRDirectory.beans;
 
+import java.io.File;
 import java.io.FileFilter;
 
 import org.com.commons.io.file.DirectoryFile;
@@ -36,6 +37,13 @@ public final class DeleteDirectoryProcessor {
 
     private FileProcessor fileProcessor(
         final FileDeleter fileDeleter) {
-        return file -> new DirectoryFile(file, fileDeleter).delete();
+        return new FileProcessor() {
+
+            @Override
+            public boolean process(
+                final File file) {
+                return new DirectoryFile(file, fileDeleter).delete();
+            }
+        };
     }
 }

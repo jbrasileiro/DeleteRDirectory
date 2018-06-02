@@ -49,6 +49,13 @@ public final class RecursiveDirectoryDeleter {
     private FileProcessor fileProcessor(
         final String[] directoriesName,
         final FileDeleter fileDeleter) {
-        return file -> delete(file, directoriesName, fileDeleter);
+        return new FileProcessor() {
+
+            @Override
+            public boolean process(
+                final File file) {
+                return delete(file, directoriesName, fileDeleter);
+            }
+        };
     }
 }
